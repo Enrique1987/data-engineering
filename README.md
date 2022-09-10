@@ -15,5 +15,4 @@ or that it is more convenient in terms of scalability to run it in the new envir
 - It is interesting to look at what technologies were used for the original ETL process, if it was an ETL that only used SQL code and our task is to carry the code in a Databricks environment but we can choose whether we want to use pyspark or sparksql we may be interested in replicating the code in SparkSQL, if on the other hand the original ETL used other languages 
  (either because it communicated via APIs when receiving the data) we may be interested in using python + pyspark. There is no single rule.
  
-#### 2.(continuation of the first question) You are migrating the ETL process to a new technology,
-####what strategy would you use to ensure that the outcome in the original and the final process is the same.How are you checking the results ? 
+#### 2.(continuation of the first question) You are migrating the ETL process to a new technology,what strategy would you use to ensure that the outcome in the original and the final process is the same.How are you checking the results ? 
