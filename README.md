@@ -6,6 +6,7 @@ A collection of technical interview questions for Data Engineer position based o
 ### Technical Questions.
 
 #### 1. OLAP vs OLTP Explain it.
+OLAP: Online Analitical processing, This is not the official definition (if there is one). But we could say that it is a way of processing data in such a way that it is used for analysis. It is the technology behind BI, its function is not operational in the sense of running a database to make transacion(add new user, update, delete..) but to extract value from the data.See how entities relate to each other.
 
 #### 2. Slow changing dimension.
 
