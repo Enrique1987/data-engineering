@@ -1,0 +1,6 @@
+{
+  "test_db_connection.py::test_atlas_setup": true,
+  "test_db_connection.py::test_basic_movies": true,
+  "test_db_connection.py::test_search_by_movie_id": true,
+  "test_db_connection.py::test_simple_text_search": true
+}
