@@ -16,6 +16,33 @@ OLAP: Online Analitical processing, This is not the official definition (if ther
 
 #### 5. CAP - Theorem
 
+In distributed systems there are 3 main things that you need to be: be consistent, available, and partition tolerant.
+
+Being consistent means that when you ask the computer for information, it will always give you the same answer.
+
+Being available means that the computer is always ready to give you an answer when you ask for it.
+
+Partition tolerance means that the computer can still work even if some parts of it stop talking to each other.
+
+The CAP theorem says that a distributed system can only have two of these three things at once. So a computer system can only have two of these three features at a time.
+
+For example, if you have a computer system that needs to be always available and partition tolerant, it may not be consistent. 
+This means that sometimes it may give you different answers depending on which part of the system you ask.
+
+##### Wich 2 should you choice ?
+
+The choice of which two features to prioritize in a distributed system depends on the specific requirements of the system and the needs of the users.
+
+For example, if you are building a system that handles financial transactions, consistency and partition tolerance might be the most important features to prioritize.
+This is because you want to make sure that every transaction is recorded accurately and reliably, and that the system continues to work even if some parts of it fail.
+
+On the other hand, if you are building a system for content delivery, availability and partition tolerance might be more important.
+ This is because you want to make sure that users can always access the content they need, and that the system can continue to work even if some parts of it are 
+ temporarily unavailable.
+
+So, the choice of which two features to prioritize really depends on the specific needs and goals of the system. It's important to carefully consider these factors and make an informed decision.
+
+
 #### 6. ACID properties.
 
 #### 7. Big data, the v´s
