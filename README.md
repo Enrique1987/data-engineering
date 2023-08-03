@@ -75,3 +75,82 @@ or that it is more convenient in terms of scalability to run it in the new envir
 #### 23. Can you tell me about a situation that was a particular challenge?
 
 #### 24. In your years working as a Data Engineer, can you tell me about a mistake you made in the past and how you have learned from it?
+
+
+#### 25. In terms of Data warehouse what is a Change Data Capture know as CDC ?
+CDC is a mechanism to keep databases that should be identical (replicas) updated, in a DWH context it may be that we have the same information at different points of our architecture for different purposes,
+the mechanism to keep these databases updated is CDC
+
+#### 26. Can you make a example of use of CDC ?
+
+Let's imagine that we have a store that sells electrical appliances, if our business is very small we could use a database to support the OLTP actions and we could also use some analysis queries in our database,
+such as knowing which appliance has been sold. more, or when money we have generated etc..
+
+while doing this may be acceptable in a small company with a small database, a large organization with a very large database is not a good idea, it is not a good idea to use the same table for doing transactions as for Analysis, for what is chosen in these cases to replicate the database (in our example the stock table)
+
+then we use table 1 for OLTP operations and table 2 which is the copy of table 1 for OLAP operations.
+
+The way to synchronize the 2 tables is through CDC
+
+
+Example:
+
+Initial State:
+
+Database 1 (Source):
+diff
+Copy code
++----+------------+-------+
+| ID | Product    | Stock |
++----+------------+-------+
+| 1  | Laptop     | 50    |
+| 2  | Smartphone | 30    |
+| 3  | Tablet     | 20    |
++----+------------+-------+
+Database 2 (Target, copy of Database 1 at the time of copying):
+diff
+Copy code
++----+------------+-------+
+| ID | Product    | Stock |
++----+------------+-------+
+| 1  | Laptop     | 50    |
+| 2  | Smartphone | 30    |
+| 3  | Tablet     | 20    |
++----+------------+-------+
+Change:
+A customer purchases a Smartphone from Database 1, reducing its stock by 1.
+
+sql
+Copy code
+UPDATE products SET Stock = Stock - 1 WHERE Product = 'Smartphone';
+CDC Capture:
+The CDC system in Database 1 detects this change and captures it in a CDC log or journal.
+
+yaml
+Copy code
+Transaction ID: 12345
+Table: products
+Operation: UPDATE
+Primary Key: ID=2
+Column: Stock
+Old Value: 30
+New Value: 29
+CDC Apply:
+The CDC system reads the captured change and applies it to Database 2. It updates the corresponding record for the Smartphone product with the new stock value of 29.
+
+Result:
+After applying the change, both Database 1 and Database 2 will have the same values:
+
+diff
+Copy code
++----+------------+-------+
+| ID | Product    | Stock |
++----+------------+-------+
+| 1  | Laptop     | 50    |
+| 2  | Smartphone | 29    |
+| 3  | Tablet     | 20    |
++----+------------+-------+
+
+summary
+CDC is used to keep Database 2 updated with respect to Database 1,
+enabling the data in Database 2 to be available for analysis and generating valuable insights without affecting the operational OLTP database
