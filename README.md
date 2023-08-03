@@ -99,7 +99,8 @@ Initial State:
 
 Database 1 (Source):
 diff
-Copy code
+
+```
 +----+------------+-------+
 | ID | Product    | Stock |
 +----+------------+-------+
@@ -107,9 +108,12 @@ Copy code
 | 2  | Smartphone | 30    |
 | 3  | Tablet     | 20    |
 +----+------------+-------+
+```
+
 Database 2 (Target, copy of Database 1 at the time of copying):
 diff
-Copy code
+
+
 +----+------------+-------+
 | ID | Product    | Stock |
 +----+------------+-------+
