@@ -98,7 +98,6 @@ Example:
 Initial State:
 
 Database 1 (Source):
-diff
 
 ```
 +----+------------+-------+
@@ -111,9 +110,8 @@ diff
 ```
 
 Database 2 (Target, copy of Database 1 at the time of copying):
-diff
 
-
+```
 +----+------------+-------+
 | ID | Product    | Stock |
 +----+------------+-------+
@@ -121,6 +119,7 @@ diff
 | 2  | Smartphone | 30    |
 | 3  | Tablet     | 20    |
 +----+------------+-------+
+```
 Change:
 A customer purchases a Smartphone from Database 1, reducing its stock by 1.
 
@@ -145,8 +144,7 @@ The CDC system reads the captured change and applies it to Database 2. It update
 Result:
 After applying the change, both Database 1 and Database 2 will have the same values:
 
-diff
-Copy code
+```
 +----+------------+-------+
 | ID | Product    | Stock |
 +----+------------+-------+
@@ -154,7 +152,7 @@ Copy code
 | 2  | Smartphone | 29    |
 | 3  | Tablet     | 20    |
 +----+------------+-------+
-
-summary
+```
+**summary**
 CDC is used to keep Database 2 updated with respect to Database 1,
 enabling the data in Database 2 to be available for analysis and generating valuable insights without affecting the operational OLTP database
