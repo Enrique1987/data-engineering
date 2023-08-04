@@ -123,14 +123,16 @@ Database 2 (Target, copy of Database 1 at the time of copying):
 Change:
 A customer purchases a Smartphone from Database 1, reducing its stock by 1.
 
-sql
-Copy code
+```
 UPDATE products SET Stock = Stock - 1 WHERE Product = 'Smartphone';
+```
+
 CDC Capture:
 The CDC system in Database 1 detects this change and captures it in a CDC log or journal.
 
+```
 yaml
-Copy code
+
 Transaction ID: 12345
 Table: products
 Operation: UPDATE
@@ -138,6 +140,8 @@ Primary Key: ID=2
 Column: Stock
 Old Value: 30
 New Value: 29
+
+```
 CDC Apply:
 The CDC system reads the captured change and applies it to Database 2. It updates the corresponding record for the Smartphone product with the new stock value of 29.
 
