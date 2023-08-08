@@ -160,3 +160,24 @@ After applying the change, both Database 1 and Database 2 will have the same val
 **summary**
 CDC is used to keep Database 2 updated with respect to Database 1,
 enabling the data in Database 2 to be available for analysis and generating valuable insights without affecting the operational OLTP database
+
+
+
+
+
+#### Whats the following code do in Databricks ?
+
+SHALLOW CLONE delta.{source_path}/{source_name}
+
+
+It will clone a table but the only thing its really generate its the metadata, it means the clone would not make a copy of the data just reference the same underlying files as the source table.
+
+
+#### How can I drop a table, removing the data that is reference underlying. can you give me a use case ?
+
+Using "PURGE"
+
+```Drop <table_name> PURGE ```
+
+A use case that occurs to me could be that of an old project that is no longer necessary, not even keeping a backup copy, so it may be a good option to delete the tables used by that project,
+making sure that we do not leave data that could belongs. So we do a more general cleaning.
