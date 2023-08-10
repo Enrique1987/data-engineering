@@ -162,7 +162,7 @@ CDC is used to keep Database 2 updated with respect to Database 1,
 enabling the data in Database 2 to be available for analysis and generating valuable insights without affecting the operational OLTP database
 
 
-
+## Databricks 
 
 
 #### Whats the following code do in Databricks ?
@@ -181,3 +181,70 @@ Using "PURGE"
 
 A use case that occurs to me could be that of an old project that is no longer necessary, not even keeping a backup copy, so it may be a good option to delete the tables used by that project,
 making sure that we do not leave data that could belongs. So we do a more general cleaning.
+
+
+#### Pyspark vs SparSQL what are the advantange one compare the other in terms of perfomrance.
+
+No, both of them are backed in the same angine: "the Catalyst optimizer"
+
+
+#### What are the User-Defined Functions in Databricks.
+
+UDF allows you to register custom SQL logic as function to reuse it later or when you want.
+
+Example:
+
+```
+CREATE OR REPLACE FUNCTION sale_announcement(item_name STRING, item_price INT)
+RETURNS STRING
+RETURN concat("The ", item_name, " is on sale for $", round(item_price * 0.8, 0));
+
+SELECT *, sale_announcement(name, price) AS message FROM item_lookup
+```
+
+
+#### How can you see the basic information of a function ? 
+
+DESCRIBE FUNCTION EXTENDED <my_function>
+
+#### How many types of functions do you know ?
+
+ 1) Scalar: It means the the funcion operate in difividual row(row by row)
+ 2) 
+
+##### When would be a advantange sparkSQL vs Pyspark 
+
+Better SparkSQL: SQL Familiarity, Portability, Readability
+Better PySpark: When you are not just using SQL.
+                Other libaries (ML)
+				
+				
+#### Nested data, you have a tables where the values are nested json, how could you convert it in a normal Table where every value is a column
+
+
+
+```
++----+------------------------------------------------------------------------------------+
+| ID |                                   value                                            |  
++----+------------+-----------------------------------------------------------------------+
+| 1  | {"device":"Linux","ecommerce":{"purchase_revenue_in_usd":1047.6","unique_items":2},|
+|    |   "event_name":"finalize","event_previous_timestamp":1593879787820475,             |
+|	 |	"event_timestamp":1593879948830076,"geo":{"city":"Huntington Park","state":"CA"}  |                                                                          | 
++----+------------------------------------------------------------------------------------+
+```
+
+We can create a new table on the fly parsing the schema.
+
+```
+CREATE OR REPLACE TEMP VIEW parsed_events AS SELECT json.* FROM (
+SELECT from_json(value, schema_of_json('{"device":"Linux","ecommerce":{"purchase_revenue_in_usd":1075.5,"total_item_quantity":1,"unique_items":1},
+                                         "event_name":"finalize","event_previous_timestamp":1593879231210816,"event_timestamp":1593879335779563,
+										 "geo":{"city":"Houston","state":"TX"}')) AS json 
+FROM my_old_table_json);
+```
+
+
+
+#### What are the 
+
+SELECT * FROM parsed_events
