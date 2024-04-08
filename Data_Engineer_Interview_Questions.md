@@ -1,24 +1,23 @@
-# Data Engineering  + Iterview Questions
+# Data Engineering + Interview Questions
 
 ## Data Engineer Interview Questions
-A collection of technical interview questions for Data Engineer position based on my day-to-day experience with real problems.
+A collection of technical interview questions for the Data Engineer position based on my day-to-day experience with real-world problems.
 
-### Technical Questions.
+### Technical Questions
 
-### 1. OLAP vs OLTP Explain it.
-OLAP: Online Analitical processing, This is not the official definition (if there is one). But we could say that it is a way of processing data in such a way that it is used for analysis. It is the technology behind BI, its function is not operational in the sense of running a database to make transacion(add new user, update, delete..) but to extract value from the data.See how entities relate to each other.
+### 1. OLAP vs OLTP: Explain it.
+OLAP: Online Analytical Processing. This is not the official definition (if there is one), but we could say that it is a way of processing data in such a way that it is used for analysis. It is the technology behind BI. Its function is not operational in the sense of running a database to make transactions (add new user, update, delete, etc.) but to extract value from the data. See how entities relate to each other.
 
-### 2. Slow Changing Dimension.  
+### 2. Slow Changing Dimension
 
-- **Type 0**: The type 0 dimensions attributes never change.7  
+- **Type 0**: The type 0 dimension's attributes never change.  
 - **Type 1**: Overwrite old with new data and therefore does not track historical data.  
-- **Type 2**: Add a new row, tracks historical data by creating amultiple records for a given natural key. We could add "effective date" columns.  
+- **Type 2**: Add a new row, tracks historical data by creating multiple records for a given natural key. We could add "effective date" columns.  
 
 | Supplier_Key | Supplier_Code | Supplier_Name  | Supplier_State | Start_Date           | End_Date             |
 |--------------|---------------|----------------|----------------|----------------------|----------------------|
 | 123          | ABC           | Acme Supply Co | CA             | 2000-01-01T00:00:00  | 2004-12-22T00:00:00  |
 | 124          | ABC           | Acme Supply Co | IL             | 2004-12-22T00:00:00  | NULL                 |
-
 
 Another method from SCD2 uses an effective date and current flag.
 
@@ -27,32 +26,29 @@ Another method from SCD2 uses an effective date and current flag.
 | 123          | ABC           | Acme Supply Co | CA             | 2000-01-01T00:00:00  | N            |
 | 124          | ABC           | Acme Supply Co | IL             | 2004-12-22T00:00:00  | Y            |
 
-
 - **Type 3**: Add a new attribute  
 
-This methos tracks changes using separate columsn and preservers limited history.
+This method tracks changes using separate columns and preserves limited history.
 
 | Supplier_Key | Supplier_Code | Supplier_Name  | Original_Supplier_State | Effective_Date       | Current_Supplier_State |
 |--------------|---------------|----------------|-------------------------|----------------------|------------------------|
-| 123          | ABC           | Acme Supply Co | CA                       | 2004-12-22T00:00:00  | IL                    |
+| 123          | ABC           | Acme Supply Co | CA                       | 2004-12-22T00:00:00  | IL                     |
 
-- **Type 4**: Same as Type 3 but win unlimited histroy by using a **separate history table**
+- **Type 4**: Same as Type 3 but with unlimited history by using a **separate history table**
 
 Supplier Table:
 | Supplier_Key | Supplier_Code | Supplier_Name              | Supplier_State |
 |--------------|---------------|----------------------------|----------------|
 | 124          | ABC           | Acme & Johnson Supply Co   | IL             |
 
-Supplier_History Table
+Supplier_History Table:
 | Supplier_Key | Supplier_Code | Supplier_Name              | Supplier_State | Create_Date           |
 |--------------|---------------|----------------------------|----------------|----------------------|
 | 123          | ABC           | Acme Supply Co             | CA             | 2003-06-14T00:00:00  |
 | 124          | ABC           | Acme & Johnson Supply Co   | IL             | 2004-12-22T00:00:00  |
 
-
-
-- **Type 5** Type 4 + Type 1
-- **Type 6** Type 1,2 and 3
+- **Type 5**: Type 4 + Type 1
+- **Type 6**: Type 1, 2, and 3
 
 
 ### 3. Database Schemas wich one do you know. Use-cases
