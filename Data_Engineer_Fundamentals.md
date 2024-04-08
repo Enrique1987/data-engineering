@@ -23,6 +23,7 @@ Continuous Deployment extends CI by automatically deploying all code changes to 
 This means that every change that passes all stages of your production pipeline is released to your customers automatically, without manual intervention.
 This process includes:
 
-**Automated Deployments:** The use of scripts or automation tools to deploy applications automatically to various environments (development, staging, production).
-**Environment Consistency:** Keeping all deployment environments as similar as possible to reduce the chances of bugs occurring due to environment-specific configurations.
-**Rollback Mechanisms:** Having the ability to quickly revert deployments if issues are detected post-release.
+**Automated Deployments:** The use of scripts or automation tools to deploy applications automatically to various environments (development, staging, production).   
+**Environment Consistency:** Keeping all deployment environments as similar as possible to reduce the chances of bugs occurring due to environment-specific configurations.  
+**Rollback Mechanisms:** Having the ability to quickly revert deployments if issues are detected post-release.  
+
