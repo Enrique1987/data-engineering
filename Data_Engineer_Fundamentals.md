@@ -30,6 +30,26 @@ This process includes:
 
 ## Database
 
+### OLAP vs OLTP
+
+`OLAP (Online Analytical Processing)` and `OLTP (Online Transaction Processing)` are two types of data processing systems used for different purposes in database management.
+
+**OLAP**  
+OLAP systems are designed for complex queries and data analysis. They are optimized for reading and analyzing large amounts of data quickly, often from multiple database systems.
+OLAP is used primarily for business intelligence and data mining, supporting decision-making processes.
+It operates on aggregated and historical data, allowing for trends and patterns to be identified over time.
+
+**OLTP**  
+OLTP systems are optimized for managing transaction-oriented applications. They are used for handling large numbers of short online transactions (Insert, Update, Delete).
+The main focus is on efficiency of data processing, with an emphasis on speed, concurrency, and reliability.
+OLTP systems are typically used for order entry, retail sales, and financial transactions.
+
+In summary, OLAP is used for data analysis and decision support, focusing on complex queries over large data sets, while OLTP is focused on quick transaction processing and efficiency in handling large numbers of transactions.
+
+
+*Bonus Extra*(in Spanish) There is a chapter in my old podcast [podcas olap-vs-oltp](https://podcasts.apple.com/au/podcast/olap-vs-oltp/id1490752470?i=1000459232747)
+
+
 ### ER-Schema
 
 Example of simple relational schema for a university system based on the entities we discussed earlier. 
