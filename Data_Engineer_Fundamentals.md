@@ -49,8 +49,7 @@ In summary, OLAP is used for data analysis and decision support, focusing on com
 
 *Bonus Extra*(in Spanish) There is a chapter in my old podcast [podcas olap-vs-oltp](https://podcasts.apple.com/au/podcast/olap-vs-oltp/id1490752470?i=1000459232747)
 
-
-### ER-Schema
+### OLTP: ER-Schema
 
 Example of simple relational schema for a university system based on the entities we discussed earlier. 
 This schema will detail each table along with its primary keys (PK) and foreign keys (FK) and describe the relationships between the tables.
@@ -115,3 +114,88 @@ This schema will detail each table along with its primary keys (PK) and foreign 
 This schema provides a comprehensive view of how the tables are interconnected within a university's database, illustrating the relationships that help manage the academic and administrative data.
 Each table is normalized to ensure data integrity and reduce redundancy. 
 ![](img/01_ER_Uni.png)
+
+
+
+### OLAP
+
+To evolve your ER schema into a dimensional schema for an OLAP (Online Analytical Processing) system, we would typically create a star schema or a snowflake schema.
+These schemas are designed to optimize query performance and simplify the design for complex analytical queries.
+Let’s break down the transformation using a **star schema** approach, which is a common method used in data warehousing.
+
+#### Step 1: Identify the Fact Table
+
+The **fact table** contains measurable, quantitative data about a business process. In the context of a university system, the "Enrollment" table is a good candidate for a fact table as it involves measurable events (course enrollments) that can be analyzed in various dimensions (student, course, time, etc.).
+
+**Fact Table: Enrollments**
+- **Attributes**:
+  - EnrollmentID (Primary Key)
+  - StudentID (Foreign Key)
+  - CourseID (Foreign Key)
+  - Semester (might split into two fields, Semester and Year for easier analysis)
+  - Grade (Numeric score or categorical data)
+
+### Step 2: Define Dimension Tables
+
+Dimension tables store attributes related to dimensions of the fact table that are used to filter, group, or label data.
+The dimensions for the "Enrollments" fact table would generally be "Student", "Course", "Professor", "Department", "Major", and a new "Time" dimension that we might need to create.
+
+**Dimension Tables**:
+
+1. **Student Dimension**
+   - StudentID (PK)
+   - FirstName
+   - LastName
+   - DateOfBirth
+   - MajorID (as a descriptive attribute linking to the Major dimension)
+
+2. **Course Dimension**
+   - CourseID (PK)
+   - CourseName
+   - CourseDescription
+   - Credits
+   - DepartmentID (as a descriptive attribute)
+
+3. **Professor Dimension**
+   - ProfessorID (PK)
+   - FirstName
+   - LastName
+   - DepartmentID (as a descriptive attribute)
+
+4. **Department Dimension**
+   - DepartmentID (PK)
+   - DepartmentName
+   - Building
+
+5. **Major Dimension**
+   - MajorID (PK)
+   - MajorName
+   - DepartmentID (as a descriptive attribute)
+
+6. **Time Dimension** (created to analyze trends over time)
+   - SemesterID (PK, composite key made from Year and Semester)
+   - Year
+   - Semester
+
+### Step 3: Simplify Relationships
+
+In a star schema, dimension tables are directly connected to the fact table but not to each other. 
+Each dimension table should include attributes that help describe the fact table records without needing to join multiple tables:
+
+- Foreign keys in the fact table (Enrollments) should correspond directly to the primary keys in each dimension table.
+- The time dimension is particularly useful for analysis and should be detailed enough to allow for various time-based queries.
+
+### Step 4: Consider Adding Aggregates or Calculated Fields
+
+In some cases, adding calculated fields directly to the fact table can speed up certain types of analysis:
+
+- Pre-calculated fields like "TotalCredits" for a semester can be stored in the fact table to speed up performance.
+- Including fields like "Pass/Fail" based on the Grade could also be beneficial for quick querying.
+
+### Implementation Considerations
+
+- **Data Granularity**: Ensure the level of detail in the fact table aligns with the intended analytical queries.
+- **Indexing and Partitioning**: Proper indexing and partitioning of the tables, especially the fact table, can improve query performance significantly.
+- **Data Refresh Strategy**: Define how often the data in the data warehouse should be refreshed from the operational databases.
+
+By restructuring your data into this dimensional schema, you can facilitate faster and more efficient querying which is essential for OLAP systems used in decision support and business intelligence.
