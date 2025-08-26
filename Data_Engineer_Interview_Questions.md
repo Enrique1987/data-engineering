@@ -85,7 +85,7 @@ The CAP theorem says that a distributed system can only have two of these three 
 For example, if you have a computer system that needs to be always available and partition tolerant, it may not be consistent. 
 This means that sometimes it may give you different answers depending on which part of the system you ask.
 
-##### Wich 2 should you choice ?
+### Wich 2 should you choice ?
 
 The choice of which two features to prioritize in a distributed system depends on the specific requirements of the system and the needs of the users.
 
@@ -98,12 +98,49 @@ On the other hand, if you are building a system for content delivery, availabili
 
 So, the choice of which two features to prioritize really depends on the specific needs and goals of the system. It's important to carefully consider these factors and make an informed decision.
 
+### Question 6  
+What are the ACID properties in databases?
 
-#### 6. ACID properties.
+### Answer 6  
+ACID stands for **Atomicity, Consistency, Isolation, and Durability** — four key guarantees of reliable transactions:
 
-#### 7. Big data, the v´s
+- **Atomicity:** A transaction is “all or nothing.” If one step fails, the whole transaction rolls back.  
+- **Consistency:** A transaction brings the database from one valid state to another, enforcing all rules (constraints, triggers, schema rules).  
+- **Isolation:** Transactions running in parallel don’t interfere; the outcome is as if they ran sequentially.  
+- **Durability:** Once a transaction is committed, it is permanently recorded, even if there’s a system crash.
 
-#### 8. What is a View in Database and when does it make sense.
+**In practice:** Databricks Delta Lake implements ACID transactions on top of data lakes, ensuring reliable writes, concurrent reads, and recovery from failures.
+---
+
+### Question 7  
+What are the “V’s” of Big Data?
+
+### Answer 7  
+Big Data is often described by several “V’s” that characterize its challenges:
+
+- **Volume:** The massive amount of data generated (terabytes → petabytes).  
+- **Velocity:** The speed at which data is produced and must be processed (real-time, streaming).  
+- **Variety:** Different data formats and sources (structured, semi-structured, unstructured).  
+- **Veracity:** Data quality, accuracy, and trustworthiness.  
+- **Value:** The ability to extract useful insights and business value from the data.
+
+**In practice:** A good engineer focuses on handling **Volume, Velocity, and Variety**, but always aligns solutions to ensure **Veracity** and maximize **Value**.
+---
+
+### Question 8  
+What is a View in a database, and when does it make sense to use one?
+
+### Answer 8  
+A **View** is a virtual table based on the result of a SQL query. It does not store data itself, only the query definition, and shows the data dynamically from the underlying tables.
+
+**Use cases where Views make sense:**
+- **Simplification:** Hide complex joins/aggregations behind a simple query interface.  
+- **Security:** Expose only specific columns/rows to users (row-level or column-level security).  
+- **Abstraction:** Provide a stable interface even if the underlying schema changes.  
+- **Reusability:** Standardize business logic (e.g., KPI definitions) in one place instead of repeating it.  
+- **In Databricks:** Views can be managed in Unity Catalog with permissions, or used as temp views inside notebooks for quick exploration.
+---
+
 
 #### 9. SQL vs NoSQL
 
@@ -302,17 +339,55 @@ FROM my_old_table_json);
 ```
 
 
-
-#### What are the 
-
-SELECT * FROM parsed_events
-
-
-
-
-
-
-
 #### Base on your experience, what bad practices did you see ? 
 
-- People out of the company been responsible or Jobs fails, so at the end nobody was notifiying.
+- **Responsibility Gaps**: People out of the company been responsible or Jobs fails, so at the end nobody was notifiying.  
+- non-intensive code reviews to save time or for fear of angering the coder, 
+making the code corrections useless as they are intended to avoid programmer error, without fear of offending.  
+- **lack of documentation:**   
+- **lack of testing**:When decisions are taken, they can be right or wrong, but if these decisions are well argued and tested, even if they are wrong because of something that has come to light after the fact, we can be satisfied with the decisions taken.  
+- unused projects.  
+- projects created for marketing purposes and not for real use.  
+
+
+## Question  
+In a Databricks environment, how would you read a folder that contains many Excel files?
+
+## Answer  
+It depends on the ingestion pattern and how the data grows over time:
+
+- **One-time bulk load (static folder):**  
+  Use the [`spark-excel`](https://github.com/crealytics/spark-excel) connector to read all files in batch. Land the raw data in a **bronze Delta** table with lineage columns (`source_file`, `ingest_ts`), then clean and standardize in **silver**.
+
+- **Ongoing growth (new files daily):**  
+  Use **Auto Loader** (`cloudFiles`) to discover new files incrementally. Ingest them as `binaryFile`, parse the Excel content (with pandas or a UDF), and write incrementally into bronze with checkpoints. This ensures scalability, retries, and idempotency.
+
+- **If possible, request CSV/Parquet upstream:**  
+  Excel is slow and brittle (merged headers, inconsistent types). Converting to CSV or Parquet gives better performance and schema stability.
+
+**Operational best practices:**
+- Define explicit schemas in silver (avoid relying only on `inferSchema`).  
+- Always add lineage (`source_file`, `sheet_name`, `ingest_ts`).  
+- Apply data quality rules (drop empty rows/columns, normalize headers, fix dates).  
+- Quarantine bad files in a rejects table for review.  
+- Optimize Delta tables (e.g. repartitioning, `OPTIMIZE`, `VACUUM`) to handle many small files.  
+- Apply Unity Catalog governance (ACLs, managed locations).
+
+**Clarifying questions to ask before implementation:**
+1. Is this a **one-time load** or **continuous ingestion**?  
+2. Approximate **volume and size** of the Excel files?  
+3. Are there multiple sheets or layouts per file?  
+4. Do we control the **upstream format** (CSV/Parquet possible)?  
+5. What are the **SLA/latency** and **error-handling** requirements?
+
+
+## Question  
+Does Auto Loader in Databricks automatically detect new files and ingest only the incremental data?
+
+## Answer  
+Yes. Auto Loader maintains a metadata log (via its checkpoint and internal tracking) of all previously ingested files.  
+- When the job runs again, it only processes **new or changed files** and ignores already-seen ones.  
+- This ensures incremental ingestion without reprocessing the full folder.  
+- In production, always configure a stable `checkpointLocation` to persist this state across job runs.  
+- For large-scale scenarios, file notification mode (Event Grid, S3 notifications, Pub/Sub) can be used instead of directory listing to reduce costs and latency.
+
