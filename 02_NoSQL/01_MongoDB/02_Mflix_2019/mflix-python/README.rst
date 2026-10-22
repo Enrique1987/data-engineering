@@ -134,7 +134,7 @@ You can deactivate the virtual environment with the following command:
 
   deactivate
 
-.. _`virtualenv installation procedure`: https://virtualenv.pypa.io/en/stable/installation/
+.. _`virtualenv installation procedure`: https://virtualenv.pypa.io/en/latest/how-to/install.html
 
 Please remember that you may have to reactivate the virtual environment if you
 open a new Terminal or Command Prompt window, or restart your system.
